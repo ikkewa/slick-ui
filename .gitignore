@@ -1,2 +1,5 @@
 .idea
 node_modules
+build/*.js
+examples/js/build*.js
+examples/*.html
