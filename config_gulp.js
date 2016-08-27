@@ -13,5 +13,11 @@ module.exports = {
   markup: {
     srcPaths: ['examples/*.pug'],
     output: 'examples/'
+  },
+  lint: {
+    paths: [
+      'lib/**/*.js',
+      '!node_modules/**'
+    ]
   }
 };
