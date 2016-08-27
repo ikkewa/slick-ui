@@ -148,6 +148,9 @@ function main() {
         checkboxBehaviour(check2, check1), this);
   }
 
+  /**
+   * Update
+   */
   function update() {
 
   }
