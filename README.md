@@ -1,31 +1,71 @@
-[![Gitter](https://badges.gitter.im/slick-ui/Lobby.svg)](https://gitter.im/slick-ui/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 # SlickUI
-![SlickUI](http://slick-ui.com/img/portfolio/thumbnails/1.jpg)
 
-SlickUI beats the challenge of creating user interfaces easily in an object oriented way.
+SlickUI is a Phaser Plugin to create user interfaces easily.
+
+This is a fork from the original [SlickUI](http://www.slick-ui.com) developed by
+Richard Snijders <richard@fizz.nl>. Visit his GitHub at [Flaxis/slick-ui](https://github.com/Flaxis/slick-ui).
+
+### Differences to the original SlickUI Plugin
+
+#### Written with ES6
+The original SlickUI is written in ES5 and I just wanted to learn ES6 with a
+practical use case. The functionality is the same, but the usage of new language
+possibilities is used and gives more comfort during the development.
+
+#### No global `game` instance needed
+As the `Phaser.Game` need to be passed to each created element, it removes the need
+to have a global `game = new Phaser.Game(..)`. The global `game` is used in the
+original plugin, which means a custom, scoped browserify build is a problem and if
+the global `game` instance is called `game2` the original plugin will stop working.
+
+At the moment the current `game` instance needs to be passed to each new created element,
+but it is on the ToDo list to remove that.
+
+#### Flattened code tree and reduced complexity
+With ES6 there are some features that reduces the complexity of code, which is used
+where possible (and I am aware of). There are also some parts where Copy&Paste code
+parts in some Elements code are removed and put into a base class.
+
+#### TextFields can be used with real Keyboard (+virtual Keyboard)
+If textfields are used, a virtual keyboard appears to enter text on mobile and desktop
+releases of your game. On Desktop environments it is also possible to use your physical
+keyboard and directly start typing. The virtual keyboard is still present.
 
 ### Try out some previews
-* [Sliding menu](http://slick-ui.com/preview/menu.html)
-* [Slider controller](http://slick-ui.com/preview/slider.html)
-* [Text input field](http://slick-ui.com/preview/text-field.html)
+
+TODO: need to setup GH Pages ;)
 
 ### Getting started
 Install using git:
 ```sh
-git clone https://github.com/Flaxis/slick-ui.git
+git clone https://github.com/ikkewa/slick-ui
 ```
-Install using bower:
-```sh
-bower install slick-ui
-```
+
+Note: NPM release not available (yet).
 
 Make sure you have the [Default Kenney theme] in your project assets and ready to load.
 
 Add the following to the bottom of your preload function:
 ```javascript
-// You can use your own methods of making the plugin publicly available. Setting it as a global variable is the easiest solution.
+// You can use your own methods of making the plugin publicly available.
 slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
 slickUI.load('assets/ui/kenney/kenney.json'); // Use the path to your kenney.json. This is the file that defines your theme.
+```
+
+The Plugin registers itself as `Phaser.Plugins.SlickUI` and from this reference
+all elements are available. To reduce code size, the easiest way is:
+
+```javascript
+var SLICKUI = Phaser.Plugin.SlickUI;
+var mygame = new Phaser.Game(...);
+var slickUI = mygame.plugins.add(SLICKUI);
+// ...
+
+var button = new SLICKUI.Button(...);
+var panel = new SLICKUI.Panel(...);
+
+slickUI.add(panel);
+panel.add(button);
 ```
 
 That's it! You're ready to start UI-ing!
@@ -38,8 +78,8 @@ To start using the UI manager, find a nice spot in your create() function and ge
 **Assuming you're using the variable slickUI for the plugin object**
 
 ```javascript
-var panel;
-slickUI.add(panel = new SlickUI.Element.Panel(8, 8, 150, game.height - 16));
+var panel = new SlickUI.Panel(8, 8, 150, game.height - 16);
+slickUI.add(panel);
 ```
 This tells the UI manager to add a new panel at X and Y = 8, width of 150 pixels and as high as the game minus 16 pixels.
 
@@ -48,10 +88,14 @@ We can now use the panel's container to add new elements to it.
 #### Adding a button
 Let's say we wanted to add a button to the panel we just created:
 ```javascript
-var button;
-panel.add(button = new SlickUI.Element.Button(0,0, 140, 80));
+var button = new SLICKUI.Button(game, 0, 0, 140, 80);
+var text = new SLICKUI.Text(game, 0, 0, 'My Button');
+panel.add(button);
+button.add(text);
+
+// change something after added
+text.center();
 button.events.onInputUp.add(function () {console.log('Clicked button');});
-button.add(new SlickUI.Element.Text(0,0, "My button")).center();
 ```
 We now added a button to the panel with the label 'My button'. When we click on it, the console will output 'Clicked Button'.
 
@@ -60,8 +104,8 @@ So what if we wanted to use SlickUI to be a bit more generic? We can also add Di
 #### Adding a DisplayObject
 We'll assume we have a sprite cached as 'menu-button'
 ```javascript
-var menuButton;
-slickUI.add(menuButton = new SlickUI.Element.DisplayObject(8, 8, game.make.sprite(0, 0, 'menu-button')));
+var menuButton = new SLICKUI.DisplayObject(game, 8, 8, game.make.sprite(0, 0, 'menu-button'));
+slickUI.add(menuButton);
 ```
 That's it! You might be thinking, why would you add a DisplayObject using the UI manager if we can do that just by using phaser's built in tools?
 
@@ -70,22 +114,24 @@ The answer is, because UI elements are cascading and they take care of that them
 #### Adding a Checkbox
 Checkboxes can be added using 3 sprites: checkbox, radio and cross. This is how you add a checkbox:
 ```javascript
-var cb;
-panel.add(cb = new SlickUI.Element.Checkbox(0,10, SlickUI.Element.Checkbox.TYPE_RADIO));
+var cb = new SLICKUI.Checkbox(game, 0, 10, SLICKUI.Checkbox.TYPE_RADIO);
+panel.add(cb);
+
 cb.events.onInputDown.add(function () {
     console.log(cb.checked ? 'Checked' : 'Unchecked');
 }, this);
 ```
 If you don't provide a type using the last parameter, the default type will be used. You can choose between the following types:
-* SlickUI.Element.Checkbox.TYPE_CHECKBOX (default type, no need to specify)
-* SlickUI.Element.Checkbox.TYPE_RADIO
-* SlickUI.Element.Checkbox.TYPE_CROSS
+* SlickUI.Checkbox.TYPE_CHECKBOX (default type, no need to specify)
+* SlickUI.Checkbox.TYPE_RADIO
+* SlickUI.Checkbox.TYPE_CROSS
 
 #### Adding a Slider
 Sliders are used to give the illusion of analog control over an object's property. For example, the game's music volume.
 ```javascript
-var slider;
-panel.add(slider = new SlickUI.Element.Slider(16,100, panel.width - 32));
+var slider = new SLICKUI.Slider(game, 16, 100, panel.width -32);
+panel.add(slider);
+
 slider.onDrag.add(function (value) {
     // This will log the slider's value on a scale of 100 every time the user moves the drag handle
     console.log(Math.round(value * 100) + '%');
@@ -101,10 +147,14 @@ slider.onDragStop.add(function (value) {
 ```
 
 #### Adding a text input field
+
 Text input fields are very useful for asking the name of the player. They use canvas embedded virtual keyboards.
+
 ```javascript
-// The last argument is used to determine the maximum amount of characters the input field can have. Defaults to 7 if kept empty.
-var textField = panel.add(new SlickUI.Element.TextField(10,58, panel.width - 20, 40, 7));
+// The last argument is used to determine the maximum amount of characters the input field can have. Defaults to 32 if kept empty.
+var textField = new SlickUI.TextField(game, 10,58, panel.width - 20, 40, 32);
+panel.add(textField);
+
 textField.events.onOK.add(function () {
     alert('Your name is: ' + textField.value);
 });
@@ -120,4 +170,66 @@ As you can see, there are three events you can listen to: onOK, onToggle and onK
 * onToggle gets dispatched when the virtual keyboard opens or closes. A boolean parameter is provided telling whether the keyboard is opened (true) or closed (false)
 * onKeyPress gets dispatched whenever the user enters a key in the virtual keyboard. Note that the DEL key gets spelled out entirely in when accessing the key in the first parameter.
 
-[Default Kenney theme]: <http://slick-ui.com/kenney-theme.zip>
+
+### Theming
+
+The Design on the canvas is based on one JSON file you provide during setup and loading the Phaser Plugin:
+
+```javascript
+slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
+slickUI.load('assets/ui/kenney/kenney.json'); // <----
+```
+
+The JSON file looks like this:
+
+```json
+{
+  "name": "<name of the theme>",
+  "images": {
+    "check_on"         : "<path to image for this>"
+    "cross_on"         : "<path to image for this>"
+    "radio_on"         : "<path to image for this>"
+    "check_off"        : "<path to image for this>"
+    "cross_off"        : "<path to image for this>"
+    "radio_off"        : "<path to image for this>"
+    "button_on"        : "<path to image for this>"
+    "button_off"       : "<path to image for this>"
+    "text_field"       : "<path to image for this>"
+    "slider_end"       : "<path to image for this>"
+    "slider_base"      : "<path to image for this>"
+    "slider_handle_off": "<path to image for this>"
+    "slider_handle_on" : "<path to image for this>"
+    "panel"            : "<path to image for this>"
+  },
+  "fonts": {
+    "minecraftia": ["fonts/minecraftia-black.png", "fonts/minecraftia.xml"]
+  },
+  "button": {
+    "border-x": 8,  // border to cut the nine-patch button from
+    "border-y": 8
+  },
+  "text_field": {
+    "border-x": 8,
+    "border-y": 8
+  },
+  "panel": {
+    "border-x": 10,
+    "border-y": 10
+  }
+}
+```
+
+Panels, Buttons and Textfield are based on so called `nine-patch` images and the
+border values in the JSON defines, how many pixels need to be cut off to create
+the left/right/top/bottom/... borders.
+
+### TODO List
+- [] Better handling of passing the `game` instance internally
+- [] no need to create elements with the `new` keyword (factory)
+- [] dropdown menus?
+- [] optimize build system
+
+### License
+
+The original sources are released with MIT License (see bower.json @flaxis/slick-ui).
+Of course this fork is released under the same MIT license.
