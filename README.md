@@ -68,7 +68,7 @@ slickUI.add(panel);
 panel.add(button);
 ```
 
-Since v0.1.1 it is possible to create elements based on your SlickUI instance
+Since v0.5 it is possible to create elements based on your SlickUI instance
 to remove the need to use the `new` keyword:
 ```javascript
 // register plugin
@@ -236,8 +236,8 @@ border values in the JSON defines, how many pixels need to be cut off to create
 the left/right/top/bottom/... borders.
 
 ### TODO List
-- [x] Better handling of passing the `game` instance internally (v0.1.1, done)
-- [x] no need to create elements with the `new` keyword (factory) (v0.1.1, done)
+- [x] Better handling of passing the `game` instance internally (v0.5, done)
+- [x] no need to create elements with the `new` keyword (factory) (v0.5, done)
 - [] dropdown menus?
 - [] optimize build system
 
