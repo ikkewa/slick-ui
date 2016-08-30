@@ -33,7 +33,9 @@ keyboard and directly start typing. The virtual keyboard is still present.
 
 ### Try out some previews
 
-TODO: need to setup GH Pages ;)
+* Menu Example: https://ikkewa.github.io/slick-ui/menu.html
+* Slider Example: https://ikkewa.github.io/slick-ui/slider.html
+* TextField Example: https://ikkewa.github.io/slick-ui/text-field.html
 
 ### Getting started
 Install using git:
