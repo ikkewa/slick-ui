@@ -44,21 +44,24 @@ function main() {
     // than later stack them in the right order
 
     // all texts
+    // create with new keyword
     var menuText  = new SLICKUI.Text(game, 10, 0, 'Menu');
-    var saveText  = new SLICKUI.Text(game, 0, 0, 'Save Game');
-    var closeText = new SLICKUI.Text(game, 0, 0, 'Close');
+    // or from the slickui instance with create() method,
+    // no `game` needs to be passed
+    var saveText  = sui.create('text', 0, 0, 'Save Game');
+    var closeText = sui.create('text', 0, 0, 'Close');
 
     // all buttons
-    var saveBtn = new SLICKUI.Button(game,
+    var saveBtn = new SLICKUI.Button(game, // again example with `new` keyword
         0, game.height - 166, 140, 80); // x, y, w, h
-    var closeBtn = new SLICKUI.Button(game,
+    var closeBtn = sui.create('button',
         0, game.height - 76, 140, 40); // x, y, w, h
-    var menuBtn = new SLICKUI.DisplayObject(game,
+    var menuBtn = sui.create('displayobject',
         game.width - 45, 8, game.make.sprite(0, 0, 'menu-button'));
         // x, y, dp-obj (w, h)
 
     // all checkboxes
-    var check1 = new SLICKUI.Checkbox(game,
+    var check1 = sui.create('checkbox',
         0, 100, SLICKUI.Checkbox.TYPE_CROSS);
     var check2 = new SLICKUI.Checkbox(game,
         50, 100, SLICKUI.Checkbox.TYPE_CROSS);
@@ -66,7 +69,7 @@ function main() {
         100, 100, SLICKUI.Checkbox.TYPE_CHECKBOX);
 
     // the main PANEL
-    var panel = new SLICKUI.Panel(game,
+    var panel = sui.create('panel',
         game.width - 156, 8, 150, game.height - 16);
 
     // add "root to leafes"

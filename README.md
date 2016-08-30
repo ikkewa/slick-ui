@@ -68,6 +68,18 @@ slickUI.add(panel);
 panel.add(button);
 ```
 
+Since v0.1.1 it is possible to create elements based on your SlickUI instance
+to remove the need to use the `new` keyword:
+```javascript
+// register plugin
+var SLICKUI = Phaser.Plugin.SlickUI;
+var mygame = new Phaser.Game(...);
+var slickUI = mygame.plugins.add(SLICKUI);
+
+// now use `.create()' instead of `new`
+var button = slickUI.create('button', 8, 8, 30, 20);
+```
+
 That's it! You're ready to start UI-ing!
 
 ### Usage
@@ -224,8 +236,8 @@ border values in the JSON defines, how many pixels need to be cut off to create
 the left/right/top/bottom/... borders.
 
 ### TODO List
-- [] Better handling of passing the `game` instance internally
-- [] no need to create elements with the `new` keyword (factory)
+- [x] Better handling of passing the `game` instance internally (v0.1.1, done)
+- [x] no need to create elements with the `new` keyword (factory) (v0.1.1, done)
 - [] dropdown menus?
 - [] optimize build system
 

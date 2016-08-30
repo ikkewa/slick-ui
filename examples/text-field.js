@@ -33,12 +33,12 @@ function main() {
   function create() {
     game.add.sprite(0, -125, 'backdrop');
 
-    var panel = new SLICKUI.Panel(
-        game, 8, 8, game.width - 16, game.height - 16);
-    var inputText = new SLICKUI.Text(
-        game, 10, 10, 'Text Input');
-    var nameText = new SLICKUI.Text(
-        game, 12, 34, 'Your Name');
+    var panel = sui.create('panel',
+        8, 8, game.width - 16, game.height - 16);
+    var inputText = sui.create('text',
+        10, 10, 'Text Input');
+    var nameText = sui.create('text',
+        12, 34, 'Your Name');
 
     sui.add(panel);
     panel.add(inputText);
@@ -47,8 +47,8 @@ function main() {
     inputText.centerHorizontally()
              .text.alpha = 0.5;
 
-    textfield = new SLICKUI.TextField(
-        game, 10, 58, panel.width - 20, 40, 32, 'QWERTZ');
+    textfield = sui.create('textfield',
+        10, 58, panel.width - 20, 40, 32, 'QWERTZ');
 
     panel.add(textfield);
 

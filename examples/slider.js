@@ -40,7 +40,7 @@ function main() {
         10, 10, 'Control the image opacity by moving the slider');
 
     var valueText = new SLICKUI.Text(game, 0, panel.height - 40, '100%');
-    var slider = new SLICKUI.Slider(game, 16, 100, game.width - 64);
+    var slider = sui.create('slider', 16, 100, game.width - 64);
     var previewSprite = game.make.sprite(0, 0, 'backdrop');
     var previewSpriteDisplay = new SLICKUI.DisplayObject(game,
         panel.width / 2, panel.height / 2 + 50, previewSprite);
