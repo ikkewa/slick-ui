@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var pug = require('gulp-pug');
 
-var config = require('../config_gulp');
+var config = require('./config');
 
 gulp.task('markup', function() {
   return gulp.src(config.markup.srcPaths)

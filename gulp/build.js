@@ -13,7 +13,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var chalk = require('chalk');
 
-var config = require('../config_gulp');
+var config = require('./config');
 
 function map_error(err) {
   var msg = '';

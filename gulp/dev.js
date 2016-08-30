@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 
-var config = require('../config_gulp');
+var config = require('./config');
 
 gulp.task('dev', ['serve', 'markup', 'lint', 'watchify'], function() {
   gulp.watch('lib/**/*.js', ['lint', 'browserify']);
