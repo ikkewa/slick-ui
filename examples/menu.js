@@ -62,11 +62,13 @@ function main() {
 
     // all checkboxes
     var check1 = sui.create('checkbox',
-        0, 100, SLICKUI.Checkbox.TYPE_CROSS);
+        0, 50, SLICKUI.Checkbox.TYPE_CROSS);
     var check2 = new SLICKUI.Checkbox(game,
-        50, 100, SLICKUI.Checkbox.TYPE_CROSS);
+        40, 50, SLICKUI.Checkbox.TYPE_CROSS);
     var check3 = new SLICKUI.Checkbox(game,
-        100, 100, SLICKUI.Checkbox.TYPE_CHECKBOX);
+        80, 50, SLICKUI.Checkbox.TYPE_CHECKBOX);
+    var check4 = new SLICKUI.Checkbox(game,
+        0, 90, SLICKUI.Checkbox.TYPE_RADIO);
 
     // the main PANEL
     var panel = sui.create('panel',
@@ -82,6 +84,7 @@ function main() {
     panel.add(check1);
     panel.add(check2);
     panel.add(check3);
+    panel.add(check4);
 
     saveBtn.add(saveText);
     closeBtn.add(closeText);
