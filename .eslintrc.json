@@ -53,7 +53,7 @@
     "no-trailing-spaces": "error",
     "no-underscore-dangle": "off",
     "no-whitespace-before-property": "error",
-    "object-curly-newline": [ "error", "always" ],
+    "object-curly-newline": [ "error", { "minProperties": 1 }],
     "one-var-declaration-per-line": [ "error", "initializations" ],
     "quote-props": [ "error", "as-needed" ],
     "quotes": [ "error", "single" ],
