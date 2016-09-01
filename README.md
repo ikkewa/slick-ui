@@ -225,6 +225,16 @@ The JSON file looks like this:
   "text_field": {
     "border-x": 8,
     "border-y": 8
+    "kbColors": {
+      "bgColor": "#<BG color keyboard panel>",
+      "bordColor": "#<border color of Keyboard panel",
+      "keyColors": {
+        "keyUpBg": "#<BG color of one key>",
+        "keyUpBord": "#<Border color of a key>",
+        "keyDownBg": "#< BG color of key that is pressed down>",
+        "keyDownBord": "#<Border color of key pressed down>"
+      }
+    }
   },
   "panel": {
     "border-x": 10,
