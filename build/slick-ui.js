@@ -1036,7 +1036,7 @@ var Key = function () {
     this.text = text;
     this._isHovered = false;
 
-    this.group = this.game.add.group();
+    this.group = this.game.add.group(null, 'key_' + text);
   }
 
   /**
@@ -1049,8 +1049,10 @@ var Key = function () {
     value: function init() {
       var _this = this;
 
-      var graphicsUp = this._createGraphic(0xcfcfcf, 0xffffff);
-      var graphicsDown = this._createGraphic(0x178ab8, 0x1fa7e1);
+      var colors = this.getThemeKey('slick-ui-theme', 'text_field').kbColors.keyColors;
+
+      var graphicsUp = this._createGraphic(colors.keyUpBord, colors.keyUpBg);
+      var graphicsDown = this._createGraphic(colors.keyDownBord, colors.keyDownBg);
 
       var keyUp = this.game.make.sprite(this._x, this._y, graphicsUp.generateTexture());
 
@@ -1087,6 +1089,7 @@ var Key = function () {
 
       this.group.add(base);
       this.group.add(text);
+      this.group.keyInstance = this;
 
       this.events = base.events;
     }
@@ -1104,6 +1107,9 @@ var Key = function () {
   }, {
     key: '_createGraphic',
     value: function _createGraphic(color1, color2) {
+      color1 = color1.replace('#', '0x');
+      color2 = color2.replace('#', '0x');
+
       var graphic = this.game.make.graphics(0, 0);
       graphic.beginFill(color1);
       graphic.drawRoundedRect(0, 0, this._width, this._height, 5);
@@ -1111,6 +1117,26 @@ var Key = function () {
       graphic.drawRoundedRect(1, 1, this._width - 2, this._height - 2, 5);
 
       return graphic;
+    }
+
+    /**
+     * Get a key from the given theme
+     *
+     * @param {String} key
+     * @param {String} typ
+     * @return {Object|false}
+     */
+
+  }, {
+    key: 'getThemeKey',
+    value: function getThemeKey(key, typ) {
+      var theme = this.game.cache.getJSON(key);
+
+      if (!theme || !theme[typ]) {
+        return false;
+      }
+
+      return theme[typ];
     }
   }]);
 
@@ -1175,6 +1201,12 @@ var Keyboard = function () {
     this.fontSize = fontSize || 16;
     this.layout = layouts[layout];
     this.height = 160;
+    this.keys = {};
+
+    var colors = this.getThemeKey('slick-ui-theme', 'text_field').kbColors;
+
+    this.bgColor = colors.bgColor;
+    this.bordColor = colors.bordColor;
 
     this.group = this.game.add.group();
     this.group.fixedToCamera = true;
@@ -1209,11 +1241,11 @@ var Keyboard = function () {
       var bitmap = this.game.make.bitmapData(this.game.width, this.height);
       bitmap.ctx.beginPath();
       bitmap.ctx.rect(0, 0, this.game.width, this.height);
-      bitmap.ctx.fillStyle = '#cccccc';
+      bitmap.ctx.fillStyle = this.bordColor;
       bitmap.ctx.fill();
       bitmap.ctx.beginPath();
       bitmap.ctx.rect(0, 2, this.game.width, this.height);
-      bitmap.ctx.fillStyle = '#f0f0f0';
+      bitmap.ctx.fillStyle = this.bgColor;
       bitmap.ctx.fill();
 
       var base = this.game.make.sprite(0, 0, bitmap);
@@ -1248,7 +1280,18 @@ var Keyboard = function () {
 
       this.game.input.keyboard.onPressCallback = function (char) {
         if (_this.group.visible) {
-          _this.events.onKeyPress.dispatch(char);
+          var k = 'key_' + char;
+
+          // this should prevent, that non layout specific
+          // keys are pressed and to "flash" the key
+          // when pressing with keyboard
+          // @TODO need timer for "flash"
+          if (_this.keys.hasOwnProperty(k)) {
+            var key = _this.keys['key_' + char];
+            key.events.onInputDown.dispatch();
+            _this.events.onKeyPress.dispatch(key);
+            key.events.onInputUp.dispatch();
+          }
         }
       };
     }
@@ -1272,6 +1315,7 @@ var Keyboard = function () {
       }
 
       group.add(key.group);
+      this.keys['key_' + key.text] = key;
 
       key.events.onInputUp.add(function () {
         if (key.text === 'UPPER' || key.text === 'lower') {
@@ -1284,7 +1328,7 @@ var Keyboard = function () {
           return;
         }
 
-        _this2.events.onKeyPress.dispatch(key.text);
+        _this2.events.onKeyPress.dispatch(key);
       });
     }
 
@@ -1299,6 +1343,26 @@ var Keyboard = function () {
     value: function toggleMode() {
       this.keyGroupUpper.visible = !this.keyGroupUpper.visible;
       this.keyGroupLower.visible = !this.keyGroupLower.visible;
+    }
+
+    /**
+     * Get a key from the given theme
+     *
+     * @param {String} key
+     * @param {String} typ
+     * @return {Object|false}
+     */
+
+  }, {
+    key: 'getThemeKey',
+    value: function getThemeKey(key, typ) {
+      var theme = this.game.cache.getJSON(key);
+
+      if (!theme || !theme[typ]) {
+        return false;
+      }
+
+      return theme[typ];
     }
   }]);
 
@@ -1443,7 +1507,7 @@ var Slider = function () {
 
       var bitmap = this.game.add.bitmapData(w, spriteEnd.height);
 
-      bitmap.copy(spriteBase, 0, 0, 1, spriteBase.height, 0, Math.round(spriteEnd.height / 4), w, spriteBase.height);
+      bitmap.copy(spriteBase, 0, 0, 1, spriteBase.height, 2, Math.round(spriteEnd.height / 4), w - 4, spriteBase.height);
 
       bitmap.copy(spriteEnd, 0, 0, spriteEnd.width, spriteEnd.height, 0, 0, spriteEnd.width, spriteEnd.height);
 
@@ -1755,15 +1819,13 @@ var TextField = function (_BaseRectangle) {
    * @param {Number} height
    * @param {Number} maxChars
    */
-  function TextField(game, x, y, width, height, maxChars) {
-    var layout = arguments.length <= 6 || arguments[6] === undefined ? 'QWERTZ' : arguments[6];
-
+  function TextField(game, x, y, width, height, maxChars, layout) {
     _classCallCheck(this, TextField);
 
     var _this = _possibleConstructorReturn(this, (TextField.__proto__ || Object.getPrototypeOf(TextField)).call(this, game, x, y, width, height));
 
     _this.maxChars = maxChars || 32;
-    _this.layout = layout;
+    _this.layout = layout || _keyboard.LAYOUT_QWERTZ;
     _this.value = '';
 
     _this.events = {
@@ -1858,10 +1920,11 @@ var TextField = function (_BaseRectangle) {
       this.text.text.text = this.value;
 
       kb.events.onKeyPress.add(function (key) {
-        if (key === 'DEL') {
+        var text = key.text;
+        if (text === 'DEL') {
           _this2.value = _this2.value.substr(0, _this2.value.length - 1);
         } else {
-          _this2.value = (_this2.value + key).substr(0, _this2.maxChars);
+          _this2.value = (_this2.value + text).substr(0, _this2.maxChars);
         }
 
         _this2.text.text.text = _this2.value;

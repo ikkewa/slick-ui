@@ -1,0 +1,44 @@
+{
+  "name": "dungeon",
+  "images": {
+    "check_on": "images/checkboxmark.png",
+    "cross_on": "images/checkboxcross.png",
+    "radio_on": "images/checkboxradio.png",
+    "check_off": "images/checkboxempty.png",
+    "cross_off": "images/checkboxempty.png",
+    "radio_off": "images/checkboxcircle.png",
+    "button_on": "images/button_on.png",
+    "button_off": "images/button.png",
+    "text_field": "images/button.png",
+    "slider_end": "images/sliderend.png",
+    "slider_base": "images/sliderhori.png",
+    "slider_handle_off": "images/slider.png",
+    "slider_handle_on": "images/slider_on.png",
+    "panel": "images/panel.png"
+  },
+  "fonts": {
+    "minecraftia": ["fonts/minecraftia-white.png", "fonts/minecraftia.xml"]
+  },
+  "button": {
+    "border-x": 8,
+    "border-y": 8
+  },
+  "text_field": {
+    "border-x": 8,
+    "border-y": 8,
+    "kbColors": {
+      "bgColor": "#8C8C8C",
+      "bordColor": "#3F3F3F",
+      "keyColors": {
+        "keyUpBg": "#B2B2B2",
+        "keyUpBord": "#3F3F3F",
+        "keyDownBg": "#C2000F",
+        "keyDownBord": "#8E071C"
+      }
+    }
+  },
+  "panel": {
+    "border-x": 16,
+    "border-y": 16
+  }
+}

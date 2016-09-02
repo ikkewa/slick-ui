@@ -22,7 +22,7 @@ function main() {
 
     game.load.image('backdrop', 'assets/backdrop.png');
 
-    sui.load('assets/ui/kenney/kenney.json');
+    sui.load('assets/ui/dungeon/theme.json');
   }
 
   var textfield;
