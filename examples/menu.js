@@ -1,7 +1,7 @@
 'use strict';
 
-function main() {
-  var game = new Phaser.Game(650, 350, Phaser.CANVAS, 'gamecanvas', {
+function main(gamecanvas, jsonPath, backPath) {
+  var game = new Phaser.Game(650, 350, Phaser.CANVAS, gamecanvas, {
     preload: preload,
     create: create,
     update: update
@@ -21,9 +21,9 @@ function main() {
     sui = game.plugins.add(SLICKUI);
 
     game.load.image('menu-button', 'assets/ui/menu.png');
-    game.load.image('backdrop', 'assets/backdrop.png');
+    game.load.image('backdrop', backPath);
 
-    sui.load('assets/ui/kenney/kenney.json');
+    sui.load(jsonPath);
   }
 
   /**
@@ -53,22 +53,22 @@ function main() {
 
     // all buttons
     var saveBtn = new SLICKUI.Button(game, // again example with `new` keyword
-        0, game.height - 166, 140, 80); // x, y, w, h
+        5, game.height - 156, 125, 60); // x, y, w, h
     var closeBtn = sui.create('button',
-        0, game.height - 76, 140, 40); // x, y, w, h
+        5, game.height - 81, 125, 40); // x, y, w, h
     var menuBtn = sui.create('displayobject',
         game.width - 45, 8, game.make.sprite(0, 0, 'menu-button'));
         // x, y, dp-obj (w, h)
 
     // all checkboxes
     var check1 = sui.create('checkbox',
-        0, 50, SLICKUI.Checkbox.TYPE_CROSS);
+        5, 50, SLICKUI.Checkbox.TYPE_CROSS);
     var check2 = new SLICKUI.Checkbox(game,
-        40, 50, SLICKUI.Checkbox.TYPE_CROSS);
+        45, 50, SLICKUI.Checkbox.TYPE_CROSS);
     var check3 = new SLICKUI.Checkbox(game,
-        80, 50, SLICKUI.Checkbox.TYPE_CHECKBOX);
+        85, 50, SLICKUI.Checkbox.TYPE_CHECKBOX);
     var check4 = new SLICKUI.Checkbox(game,
-        0, 90, SLICKUI.Checkbox.TYPE_RADIO);
+        5, 90, SLICKUI.Checkbox.TYPE_RADIO);
 
     // the main PANEL
     var panel = sui.create('panel',
@@ -163,4 +163,5 @@ function main() {
 }
 
 // run the init in own scope
-main();
+main('gamecanvas_kenney', 'assets/ui/kenney/kenney.json', 'assets/backdrop.png');
+main('gamecanvas_dungeon', 'assets/ui/dungeon/theme.json', 'assets/backdrop_dark.png');
