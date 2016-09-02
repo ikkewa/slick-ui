@@ -25,7 +25,17 @@
   },
   "text_field": {
     "border-x": 8,
-    "border-y": 8
+    "border-y": 8,
+    "kbColors": {
+      "bgColor": "#f0f0f0",
+      "bordColor": "#cccccc",
+      "keyColors": {
+        "keyUpBg": "#ffffff",
+        "keyUpBord": "#cfcfcf",
+        "keyDownBg": "#1fa7e1",
+        "keyDownBord": "#178ab8"
+      }
+    }
   },
   "panel": {
     "border-x": 10,

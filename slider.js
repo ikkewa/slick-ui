@@ -1,6 +1,6 @@
 
-function main() {
-  var game = new Phaser.Game(650, 350, Phaser.CANVAS, 'gamecanvas', {
+function main(gamecanvas, jsonPath, backPath) {
+  var game = new Phaser.Game(650, 350, Phaser.CANVAS, gamecanvas, {
     preload: preload,
     create: create,
     update: update
@@ -19,9 +19,9 @@ function main() {
   function preload() {
     sui = game.plugins.add(SLICKUI);
 
-    game.load.image('backdrop', 'assets/backdrop.png');
+    game.load.image('backdrop', backPath);
 
-    sui.load('assets/ui/dungeon/theme.json');
+    sui.load(jsonPath);
   }
 
   /**
@@ -84,4 +84,5 @@ function main() {
 }
 
 
-main();
+main('gamecanvas_kenney', 'assets/ui/kenney/kenney.json', 'assets/backdrop.png');
+main('gamecanvas_dungeon', 'assets/ui/dungeon/theme.json', 'assets/backdrop_dark.png');
